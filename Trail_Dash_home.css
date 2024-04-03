@@ -1,0 +1,101 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+body{
+  background-color: white;
+}
+.exit_border{
+  border: 2px solid;
+  display: block;
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+.exit{
+  color: black;
+  background-color: red;
+  text-decoration: none;
+  text-align: center;
+  display: block;
+  padding: 0px 10px;
+}
+.title{
+  height: 50px;
+  width: 280px;
+  text-align: center;
+  font-size: 35px;
+  font-family: "Jua", sans-serif;
+  margin-top: 15vh;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  border: 2px solid;
+  padding: 20px 25px;
+}
+.tutorial{
+  height: 95px;
+  width: 280px;
+  margin-top: 80px;
+  margin-left: auto;
+  margin-right: 25vh;
+  margin-bottom: 80px;
+  text-align: center;
+  border: 2px solid;
+}
+.text_control{
+  margin-bottom: 15px;
+}
+.button1{
+  display: block;
+  margin-right: auto;
+}
+.button_space{
+  border: 2px solid;
+  padding: 8px 10px;
+  margin: auto;
+  display: block;
+  width: 150px;
+}
+#single{
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  border: 2px solid;
+}
+#start{
+  color: black;
+  font-family: "Noto Sans Lao Looped", sans-serif;
+  font-size: 35px;
+  display: block;
+  text-decoration: none;
+  padding: 20px 25px;
+  background-image:url('#');
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+#single #start{
+  height: 40px;
+  width: 210px;
+}
+.option{
+  margin-top: 20px;
+  text-align: center;
+  padding: 20px;
+}
+.sound{
+  color: black;
+  font-family: "Noto Sans Lao Looped", sans-serif;
+  font-size: 20px;
+  border: 2px solid;
+  text-decoration: none;
+  padding: 20px 29px;
+}
+.music{
+  color: black;
+  font-family: "Noto Sans Lao Looped", sans-serif;
+  font-size: 20px;
+  border: 2px solid;
+  text-decoration: none;
+  padding: 20px 29px;
+}

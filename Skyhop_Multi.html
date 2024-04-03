@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Two Player Game</title>
+</head>
+<body>
+    <div id="player1">
+        <canvas id="game1"width="340" height="600"></canvas>
+    </div>
+    <div id="player2">
+        <canvas id="game2"width="340" height="600"></canvas>
+    </div>
+    <div id="score1">
+        <canvas id="scoreCanvas1"width="150" height="130" ></canvas>
+    </div>
+    <div id="score2">
+        <canvas id="scoreCanvas2"width="150" height="130" ></canvas>
+    </div>
+    <div id="tutorial">
+        <canvas id="tutorial" ></canvas>
+    </div>
+    <div id="reset">
+        <canvas id="resetCanvas" width="170" height="130"></canvas>
+    </div>
+    <div class="exit_border">
+      <a href="Skyhop.html" class="exit">To Title</a>
+    </div>
+    <div class="option">
+      <a href="#" class="sound">Sound</a>
+      <a href="#" class="music">Music</a>
+    </div>
+  <style>
+    #reset {
+        position: absolute;
+        width: 170px;
+        height: 130px;
+        top: auto;
+    }
+    #reset {
+        right: 680px;
+        border: 2px solid black;
+    }
+    #player1, #player2 {
+        position: absolute;
+        top: 20px;
+        width: 340px;
+        height: 600px;
+    }
+
+    #player2 {
+        right: 50%;
+        transform: translateX(-50%);
+        border: 2px solid black;
+    }
+
+    #player1 {
+        left: 50%;
+        transform: translateX(50%);
+        border: 2px solid black;
+    }
+    #score1, #score2 {
+        position: absolute;
+        top: 20px;
+        width: 150px;
+        height: 130px;
+    }
+
+    #score2 {
+        left:44.7%;
+        transform: translateX(-50%);
+        border: 2px solid black;
+    }
+
+    #score1 {
+        right: 44.7%;
+        transform: translateX(50%);
+        border: 2px solid black;
+    }
+  
+    .exit_border{
+      height: 20px;
+      width: 145px;
+      border: 2px solid;
+      display: block;
+      position: absolute;
+      top: 340px;
+      left: 700px;
+    }
+
+    .exit{
+      color: black;
+      text-decoration: none;
+      text-align: center;
+      display: block;
+      padding: 0px 10px;
+    }
+
+    .option{
+      text-align: center;
+    }
+
+    .sound{
+      height: 35px;
+      width: 68px;
+      color: black;
+      font-family: "Noto Sans Lao Looped", sans-serif;
+      border: 2px solid;
+      text-decoration: none;
+      text-align: center;
+      position: absolute;
+      top: 370px;
+      left: 701px;
+    }
+
+    .music{
+      height: 35px;
+      width: 68px;
+      color: black;
+      font-family: "Noto Sans Lao Looped", sans-serif;
+      border: 2px solid;
+      text-decoration: none;
+      text-align: center;
+      position: absolute;
+      top: 370px;
+      left: 776px;
+    }
+    
+  </style>
+
+  <script>
+    const canvas1 = document.getElementById('game1');
+    const context1 = canvas1.getContext('2d');
+    const canvas2 = document.getElementById('game2');
+    const context2 = canvas2.getContext('2d');
+    const scoreCanvas1 = document.getElementById('scoreCanvas1'); 
+    const scoreCanvas2 = document.getElementById('scoreCanvas2'); 
+
+    let platformWidth = 65;
+    let platformHeight = 15;
+    const platformStart = canvas1.height - 50;
+    const gravity = 0.33;
+    const bounceVelocity = -10.5; 
+    let minPlatformSpace = 90;
+    let maxPlatformSpace = 120;
+
+    let score1 = 0;
+    let score2 = 0;
+
+    
+    let platforms1 = [{
+      x: canvas1.width / 2 - platformWidth / 2,
+      y: platformStart
+    }]; 
+
+    let platforms2 = [{
+      x: canvas2.width / 2 - platformWidth / 2,
+      y: platformStart
+    }];
+
+    function random(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+  
+    let y = platformStart;
+    while (y > 0) {
+      y -= platformHeight + random(minPlatformSpace, maxPlatformSpace);
+      do {
+        x = random(1, canvas1.width - 1 - platformWidth);
+      } while ( y > canvas1.height / 2 && Math.abs(x - canvas1.width / 2) > platformWidth / 2 );
+      platforms1.push({ x, y });
+
+     
+      do {
+        x = random(1, canvas2.width - 1 - platformWidth);
+      } while ( y > canvas2.height / 2 && Math.abs(x - canvas2.width / 2) > platformWidth / 2 );
+      platforms2.push({ x, y }); 
+    }
+
+    const player1 = {
+      width: 30,
+      height: 45,
+      x: canvas1.width /2 - 20,
+      y: platformStart - 60,
+      dx: 0,
+      dy: 0
+    };
+
+    const player2 = {
+      width: 30,
+      height: 45,
+      x: canvas2.width /2 - 20,
+      y: platformStart - 60,
+      dx: 0,
+      dy: 0
+    };
+
+    let keydown1 = false; 
+    let keydown2 = false; 
+    let prevPlayerY1 = player1.y; 
+    let prevPlayerY2 = player2.y; 
+
+    function tutorial() {
+      const tutorial = document.getElementById('tutorial');
+      const ctx = tutorial.getContext('2d');
+      ctx.clearRect(0, 0, tutorial.width, tutorial.height);
+      ctx.font = '17px Arial';
+      ctx.fillStyle = 'black';
+      ctx.fillText('CONTROLS', 40, 40);
+      ctx.fillText('Player 1: \u2190 \u2192', 10, 90);
+      ctx.fillText('Player 2: A  D', 120, 90); 
+    }
+
+    function displayScore() {
+      const ctx1 = scoreCanvas1.getContext('2d');
+      ctx1.clearRect(0, 0, scoreCanvas1.width, scoreCanvas1.height);
+      ctx1.font = '20px Arial';
+      ctx1.fillStyle = 'black';
+      ctx1.fillText('Player 2: ', 10, 30);
+      ctx1.fillText(score1, 10, 50);
+
+      const ctx2 = scoreCanvas2.getContext('2d');
+      ctx2.clearRect(0, 0, scoreCanvas2.width, scoreCanvas2.height);
+      ctx2.font = '20px Arial';
+      ctx2.fillStyle = 'black';
+      ctx2.fillText('Player 1: ', 10, 30);
+      ctx2.fillText(score2, 10, 50);
+    }
+    function reset() {
+        const ctx = resetCanvas.getContext('2d');
+        ctx.clearRect(0, 0, resetCanvas.width, resetCanvas.height);
+        ctx.font = '20px Arial';
+        ctx.fillStyle = 'black';
+        ctx.fillText('Controls: ', 45, 29);
+        ctx.fillText('P1 - \u2190  \u2192', 40, 75);
+        ctx.fillText('P2 - A & D', 40, 105);
+
+        if (player1.y > canvas1.height){
+            ctx.clearRect(0, 0, resetCanvas.width, resetCanvas.height);
+            ctx.fillText('Player 1 WINS!! ', 10, 50);
+            ctx.font = '15px Arial';
+            ctx.fillText('Press "Space" to reset ', 10, 100);
+            player2.y -= 600;
+            document.addEventListener('keydown', function(e) {
+            if (e.which === 32) {
+                resetGame();
+          }
+        });
+
+        }
+        else if(player2.y > canvas2.height){
+            ctx.clearRect(0, 0, resetCanvas.width, resetCanvas.height);
+            ctx.fillText('Player 2 WINS!! ', 10, 50);
+            ctx.font = '15px Arial';
+            ctx.fillText('Press "Space" to reset ',10, 100 );
+            player1.y -= 600;
+            document.addEventListener('keydown', function(e) {
+            if (e.which === 32) {
+                resetGame();
+          }
+        });
+        }
+      
+
+
+    }
+
+    function resetGame() {
+      score1 = 0;
+      score2 = 0;
+      platformWidth = 65;
+      platforms1 = [{
+        x: canvas1.width / 2 - platformWidth / 2,
+        y: platformStart
+      }];
+      platforms2 = [{
+        x: canvas2.width / 2 - platformWidth / 2,
+        y: platformStart
+      }];
+      player1.x = canvas1.width / 2  - player1.width / 2;
+      player1.y = platformStart - 70;
+      player1.dx = 0;
+      player1.dy = 0;
+      player2.x = canvas2.width / 2  - player2.width / 2;
+      player2.y = platformStart - 70;
+      player2.dx = 0;
+      player2.dy = 0;
+      y = platformStart;
+      while (y > 0) {
+        y -= platformHeight + random(minPlatformSpace, maxPlatformSpace);
+        do {
+          x = random(1, canvas1.width - 1 - platformWidth);
+        } while (
+          y > canvas1.height / 2 && Math.abs(x - canvas1.width / 2) > platformWidth / 2
+        );
+        platforms1.push({ x, y });
+
+       
+        do {
+          x = random(1, canvas2.width - 1 - platformWidth);
+        } while (
+          y > canvas2.height / 2 && Math.abs(x - canvas2.width / 2) > platformWidth / 2
+        );
+        platforms2.push({ x, y }); 
+      }
+    }
+
+    function loop() {
+      requestAnimationFrame(loop);
+
+      
+      context1.clearRect(0, 0, canvas1.width, canvas1.height);
+      player1.dy += gravity;
+
+      if (player1.y < canvas1.height / 2 && player1.dy < 0) {
+        platforms1.forEach(function(platform1) {
+          platform1.y += -player1.dy;
+        });
+
+        while (platforms1[platforms1.length - 1].y > 0) {
+          platforms1.push({
+            x: random(25, canvas1.width - 25 - platformWidth),
+            y: platforms1[platforms1.length - 1].y - (platformHeight + random(minPlatformSpace, maxPlatformSpace))
+        });
+        score1 += 100;  
+        if (platformWidth <= 30) {
+            platformWidth = 30;
+        }
+        else if (platformWidth >= 5) {
+            platformWidth -= 0.5;
+          }
+          
+        }
+        maxPlatformSpace = Math.min(maxPlatformSpace, canvas1.height / 2);
+      } 
+      else {
+        player1.y += player1.dy;
+      }
+
+      if (!keydown1) { 
+        player1.dx = 0;
+      }
+      player1.x += player1.dx;
+
+      if (player1.x + player1.width < 0) {
+        player1.x = canvas1.width;
+      } else if (player1.x > canvas1.width) {
+        player1.x = -player1.width;
+      } else if (player1.y > canvas1.height) {
+        context1.font = '40px Arial';
+        context1.fillStyle = 'black';
+        context1.fillText('GAME OVER', canvas1.width/2 - 115, canvas1.height/2);
+        context1.font = '25px Arial';
+        context1.fillStyle = 'black';
+
+        document.addEventListener('keydown', function(e) {
+          if (e.which === 32) {
+            resetGame();
+          }
+        });
+      }
+
+      context1.fillStyle = 'green';
+      platforms1.forEach(function(platform1) {
+        context1.fillRect(platform1.x, platform1.y, platformWidth, platformHeight);
+
+        if (
+          player1.dy > 0 &&
+          prevPlayerY1 + player1.height <= platform1.y &&
+          player1.x < platform1.x + platformWidth &&
+          player1.x + player1.width > platform1.x &&  
+          player1.y < platform1.y + platformHeight &&
+          player1.y + player1.height > platform1.y
+        ) {
+          player1.dy = bounceVelocity;
+        }
+      });
+
+      context1.fillStyle = 'yellow';
+      context1.fillRect(player1.x, player1.y, player1.width, player1.height);
+
+      prevPlayerY1 = player1.y;
+
+      platforms1 = platforms1.filter(function(platform1) {
+        return platform1.y < canvas1.height;
+      });
+
+   
+      context2.clearRect(0, 0, canvas2.width, canvas2.height);
+      player2.dy += gravity;
+
+      if (player2.y < canvas2.height / 2 && player2.dy < 0) {
+        platforms2.forEach(function(platform2) {
+          platform2.y += -player2.dy;
+        });
+
+        while (platforms2[platforms2.length - 1].y > 0) {
+          platforms2.push({
+            x: random(25, canvas2.width - 25 - platformWidth),
+            y: platforms2[platforms2.length - 1].y - (platformHeight + random(minPlatformSpace, maxPlatformSpace))
+          });
+          score2 += 100;
+          if (platformWidth <= 30) {
+            platformWidth = 30;
+          } else if (platformWidth >= 5) {
+            platformWidth -= 0.5;
+          }
+          
+        }
+        maxPlatformSpace = Math.min(maxPlatformSpace, canvas2.height / 2);
+      } else {
+        player2.y += player2.dy;
+      }
+
+      if (!keydown2) { 
+        player2.dx = 0;
+      }
+      player2.x += player2.dx;
+      if (player2.x + player2.width < 0) {
+        player2.x = canvas2.width;
+      } else if (player2.x > canvas2.width) {
+        player2.x = -player2.width;
+      } else if (player2.y > canvas2.height) {
+        context2.font = '40px Arial';
+        context2.fillStyle = 'black';
+        context2.fillText('GAME OVER', canvas2.width/2 - 115, canvas2.height/2);
+        context2.font = '25px Arial';
+        context2.fillStyle = 'black';
+
+
+        document.addEventListener('keydown', function(e) {
+          if (e.which === 32) {
+            resetGame();
+          }
+        });
+      }
+
+      context2.fillStyle = 'blue';
+      platforms2.forEach(function(platform2) {
+        context2.fillRect(platform2.x, platform2.y, platformWidth, platformHeight);
+
+        if (
+          player2.dy > 0 &&
+          prevPlayerY2 + player2.height <= platform2.y &&
+          player2.x < platform2.x + platformWidth &&
+          player2.x + player2.width > platform2.x &&  
+          player2.y < platform2.y + platformHeight &&
+          player2.y + player2.height > platform2.y
+        ) {
+          player2.dy = bounceVelocity;
+        }
+      });
+
+      context2.fillStyle = 'red';
+      context2.fillRect(player2.x, player2.y, player2.width, player2.height);
+
+      prevPlayerY2 = player2.y;
+
+      platforms2 = platforms2.filter(function(platform2) {
+        return platform2.y < canvas2.height;
+      });
+      displayScore();
+      reset();
+     
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (e.which === 37) {
+        keydown1 = true; 
+        player1.dx = -4; 
+      } else if (e.which === 39) { 
+        keydown1 = true; 
+        player1.dx = 4; 
+      } else if (e.which === 65) {
+        keydown2 = true;
+        player2.dx = -4;
+      } else if (e.which === 68) {
+        keydown2 = true;
+        player2.dx = 4;
+      }
+    });
+
+    document.addEventListener('keyup', function (e) {
+      if (e.which === 37 || e.which === 39) {
+        keydown1 = false;
+      } else if (e.which === 65 || e.which === 68) {
+        keydown2 = false;
+      }
+    });
+
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>

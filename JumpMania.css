@@ -1,0 +1,197 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+.title{
+  text-align: center;
+  margin-top: 70px;
+  font-size: 75px;
+  font-family: "Jua", sans-serif;
+}
+.description{
+  height: 200px;
+  width: 1070px;
+  border: 2px solid;
+  position: relative;
+  left: 235px;
+}
+.container {
+  margin-top: 50px;
+  width: 960px;
+  border: 2px solid;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  overflow: hidden;
+  position: relative;
+  left: 280px;
+}
+.carousel {
+  width: 300px;
+  height: 200px;
+  overflow: hidden;
+  margin-right: 10px;
+  border: 2px solid;
+  position: relative;
+}
+.carousel .slides {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+.carousel .slide {
+  flex: 0 0 300px;
+  height: 100%;
+}
+.carousel .slide img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+}
+.skyhop{
+  margin-top: 120px;
+  top: 645px;
+  left: 160px;
+  position: absolute;
+}
+.skyhop_des{
+  margin-top: 180px;
+  height: 250px;
+  width: 350px;
+  border: 2px solid;
+  position: relative;
+  bottom: auto;
+  left: 100px;
+  overflow: hidden;
+}
+.skyhop_play{
+  height: 20px;
+  width: 50px;
+  color: black;
+  font-size: large;
+  text-align: center;
+  text-decoration: none;
+  border: 2px solid;
+  position: absolute;
+  top: 940px;
+  left: 470px;
+}
+.skyhop_container {
+  height: 200px;
+  width: 460px;
+  border: 2px solid;
+  position: absolute;
+  overflow: hidden;
+  margin-top: 20px;
+  margin-bottom: 50px;
+  left: 100px;
+}
+.skyhop_carousel {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+.skyhop_slide {
+  flex: 0 0 300px;
+  height: 100%;
+  text-align: center;
+  padding-top: 20px;
+  font-family: Arial, sans-serif;
+}
+.trail_dash{
+  margin-top: 120px;
+  top: 645px;
+  left: 640px;
+  position: absolute;
+}
+.trail_dash_des{
+  height: 180px;
+  width: 350px;
+  border: 2px solid;
+  position: absolute;
+  top: 810px;
+  left: 600px;
+  overflow: hidden;
+}
+.trail_dash_play{
+  height: 20px;
+  width: 50px;
+  color: black;
+  font-size: large;
+  text-align: center;
+  text-decoration: none;
+  border: 2px solid;
+  position: absolute;
+  top: 890px;
+  left: 1370px;
+}
+.trail_dash_container {
+  height: 180px;
+  width: 390px;
+  border: 2px solid;
+  position: absolute;
+  overflow: hidden;
+  margin-top: 20px;
+  margin-bottom: 50px;
+  top: 790px;
+  left: 965px;
+}
+.trail_dash_carousel {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+.trail_dash_slide {
+  flex: 0 0 300px;
+  height: 100%;
+  text-align: center;
+  padding-top: 20px;
+  font-family: Arial, sans-serif;
+}
+.tower_climber{
+  margin-top: 120px;
+  top: 920px;
+  left: 640px;
+  position: absolute;
+}
+.tower_climber_des{
+  height: 180px;
+  width: 350px;
+  border: 2px solid;
+  position: absolute;
+  top: 1090px;
+  left: 600px;
+  overflow: hidden;
+}
+.tower_climber_play{
+  height: 20px;
+  width: 50px;
+  color: black;
+  font-size: large;
+  text-align: center;
+  text-decoration: none;
+  border: 2px solid;
+  position: absolute;
+  top: 1170px;
+  left: 1370px;
+}
+.tower_climber_container {
+  height: 180px;
+  width: 390px;
+  border: 2px solid;
+  position: absolute;
+  overflow: hidden;
+  margin-top: 20px;
+  margin-bottom: 50px;
+  top: 1070px;
+  left: 965px;
+}
+.stower_climber_carousel {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+.tower_climber_slide {
+  flex: 0 0 300px;
+  height: 100%;
+  text-align: center;
+  padding-top: 20px;
+  font-family: Arial, sans-serif;
+}
